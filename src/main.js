@@ -1,17 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import { config } from "dotenv";
-import {router} from './routes/routes.js';
+import { router } from './routes/routes.js';
+import { json } from 'express';
 
 config();
 
-
 const app = express();
 
-app.use(express.json());
+// Use CORS middleware first to handle CORS headers
 app.use(cors());
 
-app.use("/api", router)
+// Apply the JSON middleware to handle larger request bodies
+app.use(json({ limit: '100mb' }));
+
+// Use the Express Router for your API routes
+app.use("/api", router);
 
 const port = process.env.APP_PORT || 9000;
 

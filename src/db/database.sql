@@ -8,7 +8,7 @@ CREATE TABLE product (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name VARCHAR(255),
     price INTEGER,
-    image VARCHAR(255)
+    image VARCHAR(2550)
 );
 
 
@@ -41,10 +41,12 @@ CREATE TABLE orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID,
     product_id UUID,
+    explanation VARCHAR(255),
     status order_status DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
+
 
 -- This is a join for the orders table
 

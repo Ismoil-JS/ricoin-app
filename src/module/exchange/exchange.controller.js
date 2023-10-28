@@ -64,7 +64,10 @@ class ExchangeController {
 
         async finishExchange(req, res) {
             try {
-                const exchange = await exchangeService.finishExchange(req.params.id);
+                const id = req.params.id;
+                const explanation = req.body.explanation;
+
+                const exchange = await exchangeService.finishExchange({explanation, id});
     
                 res.status(200).json(exchange);
             } catch (error) {

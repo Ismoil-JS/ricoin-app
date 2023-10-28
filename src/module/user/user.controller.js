@@ -49,12 +49,11 @@ class UserController {
             return res.status(404).json({ message: "User not found" });
         }
 
-
         const token = generateToken(user[0]);
         res.cookie("token", token);
         res.header("Authorization", token);
 
-        res.status(201).json({ token: token});
+        res.status(201).json({ token: token, role: user[0].role});
     }
 
     async updateUser(req, res) {
@@ -86,11 +85,11 @@ class UserController {
         if (chekUserEmail.length > 0) {
             return res.status(409).json({ message: "Email already exists" });
         }
-
         const user = await userService.createAdmin(req.body).catch((err) => {
             return res.status(404).json({ message: err.message });
         });
-        res.status(201).json(user);
+        
+        res.status(201).json();
     }
 
     async deleteUser(req, res) {
