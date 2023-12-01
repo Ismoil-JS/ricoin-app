@@ -11,19 +11,19 @@ class ScannerController {
 
             const event = await eventService.getEventById(event_id);
 
-            console.log(event[0].participants);
+            // console.log(event[0].participants);
 
             if (!event[0].participants.includes(user_id)) {
-                return res.status(401).json({
-                    message: "You are not a participant of this event"
+                return res.status(400).json({
+                    message: "Siz bu tadbirda qatnashmagansiz"
                 });
             }
 
             const check = await scannerService.checkEarned({ user_id: user_id, event_id: event_id });
 
             if (check.length > 0) {
-                return res.status(401).json({
-                    message: "You have already earned with this QR code"
+                return res.status(400).json({
+                    message: "Siz bu tadbir uchun coinlarni allaqachon olgansiz"
                 });
             }
 
@@ -31,11 +31,11 @@ class ScannerController {
 
             scannerService.createEarned({ user_id: user_id, event_id: event_id });
 
-            res.status(200).json({
-                message: "Coins added successfully"
+            res.status(201).json({
+                message: "Coinlaringiz muvaffaqiyatli qo'shildi"
             });
         } catch (error) {
-            res.status(error.status).json({ message: error.message });
+            res.status(500).json({ message: error.message });
         }
     }
 

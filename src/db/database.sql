@@ -6,20 +6,20 @@ CREATE EXTENSION  "pgcrypto";
 
 CREATE TABLE product (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    name VARCHAR(255),
-    price INTEGER,
-    image VARCHAR(2550)
+    name VARCHAR(255) NOT NULL,
+    price INTEGER NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL
 );
 
 
 CREATE TABLE events (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    name VARCHAR(255),
-    date VARCHAR(255),
-    coins INTEGER,
-    image VARCHAR(255),
-    location VARCHAR(255),
-    participants UUID[]
+    name VARCHAR(255) NOT NULL,
+    date VARCHAR(255) NOT NULL,
+    coins INTEGER NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    participants UUID[] DEFAULT array[]::uuid[] 
 );
 
 CREATE TABLE users (
@@ -29,10 +29,10 @@ CREATE TABLE users (
     email VARCHAR(255),
     password VARCHAR(255),
     role VARCHAR(255) DEFAULT 'user',
-    coins INTEGER,
-    avatar VARCHAR(255),
-    bought_products UUID[],
-    events UUID[]
+    coins INTEGER DEFAULT 0,
+    avatar VARCHAR(255) DEFAULT '',
+    bought_products UUID[] DEFAULT array[]::uuid[] ,
+    events UUID[] DEFAULT array[]::uuid[]
 );
 
 CREATE type order_status as enum ('pending', 'done');
@@ -41,12 +41,10 @@ CREATE TABLE orders (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID,
     product_id UUID,
-    explanation VARCHAR(255),
     status order_status DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
-
 
 -- This is a join for the orders table
 

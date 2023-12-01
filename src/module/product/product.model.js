@@ -1,7 +1,7 @@
 import { Postgres } from "../../postgres/postgres.js";
 
 export class ProductModel {
-    #_postgres 
+    #_postgres
 
     constructor() {
         this.#_postgres = new Postgres();
@@ -18,34 +18,36 @@ export class ProductModel {
     }
 
     async createProduct(payload) {
-        const query = `INSERT INTO product (name, price, image) VALUES ($1, $2, $3) RETURNING *`;
-        return await this.#_postgres.fetch(query, payload.name, payload.price, payload.image);
+        const query = `INSERT INTO product (name, price, description, image) VALUES ($1, $2, $3, $4) RETURNING *`;
+        return await this.#_postgres.fetch(query, payload.name, payload.price, payload.description, payload.image);
     }
 
     async updateProduct(payload) {
         const product = await this.getProductById(payload.id);
-    
+
         const { name, price, image } = payload; // Destructure payload
-    
+
         const query = `
             UPDATE product 
             SET 
                 name = $1,
                 price = $2,
-                image = $3
-            WHERE id = $4
+                description = $3,
+                image = $4
+            WHERE id = $5
             RETURNING *
         `;
-    
+
         return await this.#_postgres.fetch(
             query,
             name || product[0].name, // Use payload value if defined, otherwise use the existing value
             price || product[0].price,
+            payload.description || product[0].description,
             image || product[0].image,
             payload.id
         );
     }
-    
+
 
     async deleteProduct(id) {
         const query = `DELETE FROM product WHERE id = $1`;

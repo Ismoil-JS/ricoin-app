@@ -12,7 +12,6 @@ export class ExchangeModel {
             o.id AS order_id,
             CONCAT(u.name, ' ', u.surname) AS user_full_name,
             p.name AS product_name,
-            o.explanation AS explanation,
             o.status AS order_status
         FROM
             orders o
@@ -28,7 +27,6 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.explanation AS explanation,
             o.status AS order_status
         FROM
             orders o
@@ -47,7 +45,6 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.explanation AS explanation,
             o.status AS order_status
         FROM
             orders o
@@ -66,7 +63,6 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.explanation AS explanation,
             o.status AS order_status
         FROM
             orders o
@@ -85,9 +81,9 @@ export class ExchangeModel {
         return await this.#_postgres.fetch(query, payload.user_id, payload.product_id);
     }
 
-    async finishExchange(payload) {
-        const query = `UPDATE orders SET status = 'done', explanation = $1 WHERE id = $2 RETURNING *`;
-        return await this.#_postgres.fetch(query, payload.explanation, payload.id);
-    }  
+    async finishExchange(id) {
+        const query = `UPDATE orders SET status = 'done' WHERE id = $1 RETURNING *`;
+        return await this.#_postgres.fetch(query, id);
+    }
 
 }

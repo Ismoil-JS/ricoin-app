@@ -1,5 +1,5 @@
 import pg from "pg";
-import {config} from "dotenv";
+import { config } from "dotenv";
 config();
 
 export class Postgres {
@@ -10,7 +10,7 @@ export class Postgres {
             host: process.env.DB_HOST ?? 'localhost',
             port: process.env.DB_PORT ?? 5432,
             user: process.env.DB_USER ?? 'postgres',
-            password: process.env.DB_PASSWORD ?? '#Ismoil1705',
+            password: process.env.DB_PASSWORD ?? '1234',
             database: process.env.DB_DATABASE ?? 'eventregulation',
         });
 
