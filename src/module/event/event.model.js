@@ -24,33 +24,39 @@ export class EventModel {
 
     async updateEvent(payload) {
         const product = await this.getEventById(payload.id);
+    
+        if (product.length === 0) {
+            return null; 
+        }
 
-        const { name, date, coins, location } = payload; // Destructure payload
-
+        const { name, date, coins, location } = payload;
+    
         const query = `
             UPDATE events 
             SET 
                 name = $1,
                 date = $2,
                 coins = $3,
-                location = $4,
+                location = $4
             WHERE id = $5
-            RETURNING *
         `;
-
-        if (product.length === 0) {
-            return null;
+    
+        try {
+            const result = await this.#_postgres.fetch(
+                query,
+                name || product[0].name, 
+                date || product[0].date,
+                coins || product[0].coins,
+                location || product[0].location,
+                payload.id
+            );
+    
+            return result;
+        } catch (error) {
+            return { error: "Failed to update record" };
         }
-
-        return await this.#_postgres.fetch(
-            query,
-            name || product[0].name, // Use payload value if defined, otherwise use the existing value
-            date || product[0].date,
-            coins || product[0].coins,
-            location || product[0].location,
-            payload.id
-        );
     }
+    
 
 
     async deleteEvent(id) {

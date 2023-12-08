@@ -46,10 +46,6 @@ class EventController {
                 return res.status(404).json({ message: "Event deleted" });
             }
 
-            if (event.length === 0) {
-                return res.status(404).json({ message: "Event not found" });
-            }
-
             res.status(204).json();
         } catch (error) {
             res.status(error.status).json({ message: error.message });
