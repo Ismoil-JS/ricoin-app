@@ -23,7 +23,6 @@ class ProductController {
 
     async createProduct(req, res) {
         try {
-            console.log(req.body, "conrollerga keldi");
             const product = await ProductService.createProduct(req.body);
             res.status(200).json(product);
         } catch (error) {
@@ -45,8 +44,13 @@ class ProductController {
 
     async deleteProduct(req, res) {
         try {
-            const product = await ProductService.deleteProduct(req.params.id);
-            res.status(200).json(product);
+            const response = await ProductService.deleteProduct(req.params.id);
+            if (response === "pending") {
+                return res.status(400).json({ message: "This Product is pending in order" });
+            }
+            else {
+                res.status(204).json();
+            }
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }

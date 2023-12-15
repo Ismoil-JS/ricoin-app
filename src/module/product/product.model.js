@@ -50,7 +50,20 @@ export class ProductModel {
 
 
     async deleteProduct(id) {
-        const query = `DELETE FROM product WHERE id = $1`;
-        await this.#_postgres.fetch(query, id);
+
+        const Product = `Select * FROM orders WHERE product_id = $1;`
+        const result = await this.#_postgres.fetch(Product, id);
+
+        if (result[0].status ==='pending') {
+            return "pending";
+        }
+        else {
+            const Dquery = `DELETE FROM orders WHERE product_id = $1;`;
+            await this.#_postgres.fetch(Dquery, id);
+
+            const query = `
+            DELETE FROM product WHERE id = $1`;
+            await this.#_postgres.fetch(query, id);
+        }
     }
 }
