@@ -12,4 +12,5 @@ export const exchangeRoutes = router
     .get("/finished", auth, adminAuth, exchangeController.getFinishedExchanges)
     .get("/:id", CheckId, checkExchangeId, exchangeController.getExchangeById)
     .post("/:id", auth, CheckId, checkProductId, coinsCheck, exchangeController.createExchange)
-    .patch("/:id", auth, adminAuth, CheckId, checkExchangeId, exchangeController.finishExchange);
+    .patch("/:id", auth, adminAuth, CheckId, checkExchangeId, exchangeController.finishExchange)
+    .delete("/:id", auth, adminAuth, CheckId, checkExchangeId, exchangeController.cancelExchange);

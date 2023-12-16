@@ -76,6 +76,11 @@ export class ExchangeModel {
         return await this.#_postgres.fetch(query, id);
     }
 
+    async getExchangeByIdNotChanged(id) {
+        const query = `SELECT * FROM orders WHERE id = $1`;
+        return await this.#_postgres.fetch(query, id);
+    }
+
     async createExchange(payload) {
         const query = `INSERT INTO orders (user_id, product_id) VALUES ($1, $2) RETURNING *`;
         return await this.#_postgres.fetch(query, payload.user_id, payload.product_id);
@@ -83,6 +88,11 @@ export class ExchangeModel {
 
     async finishExchange(id) {
         const query = `UPDATE orders SET status = 'done' WHERE id = $1 RETURNING *`;
+        return await this.#_postgres.fetch(query, id);
+    }
+
+    async cancelExchange(id) {
+        const query = `Delete from orders WHERE id = $1`;
         return await this.#_postgres.fetch(query, id);
     }
 

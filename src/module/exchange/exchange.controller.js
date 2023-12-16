@@ -1,4 +1,4 @@
-import { CalculateOrders } from "../../utility/calculate-orders.utility.js";
+import { CalculateOrders, CancelOrders } from "../../utility/calculate-orders.utility.js";
 import exchangeService from "./exchange.service.js";
 
 class ExchangeController {
@@ -67,6 +67,31 @@ class ExchangeController {
             const exchange = await exchangeService.finishExchange(req.params.id);
 
             res.status(200).json(exchange);
+        } catch (error) {
+            res.status(error.status).json({ message: error.message });
+        }
+    }
+
+    async cancelExchange(req, res) {
+        try {
+            const exchange = await exchangeService.getExchangeById(req.params.id);
+
+            console.log(exchange[0].order_status);
+            
+            if (!exchange.length) {
+                return res.status(404).json({ status: 404, message: "Exchange does not exist with this ID" });
+            }
+            else if (exchange[0].order_status === "done") {
+                return res.status(400).json({ status: 400, message: "Exchange is already finished" });
+            }
+            else{
+                CancelOrders(req.params.id);
+    
+                await exchangeService.cancelExchange(req.params.id);
+    
+                res.status(204).json();
+            }
+            
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }
