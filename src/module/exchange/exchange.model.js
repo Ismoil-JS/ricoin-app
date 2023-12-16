@@ -12,7 +12,8 @@ export class ExchangeModel {
             o.id AS order_id,
             CONCAT(u.name, ' ', u.surname) AS user_full_name,
             p.name AS product_name,
-            o.status AS order_status
+            o.status AS order_status,
+            o.amount AS order_amount
         FROM
             orders o
         JOIN
@@ -27,7 +28,8 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.status AS order_status
+            o.status AS order_status,
+            o.amount AS order_amount
         FROM
             orders o
         JOIN
@@ -45,7 +47,8 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.status AS order_status
+            o.status AS order_status,
+            o.amount AS order_amount
         FROM
             orders o
         JOIN
@@ -63,7 +66,8 @@ export class ExchangeModel {
             o.id AS order_id,
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
-            o.status AS order_status
+            o.status AS order_status,
+            o.amount AS order_amount
         FROM
             orders o
         JOIN
@@ -82,13 +86,13 @@ export class ExchangeModel {
     }
 
     async createExchange(payload) {
-        const query = `INSERT INTO orders (user_id, product_id) VALUES ($1, $2) RETURNING *`;
-        return await this.#_postgres.fetch(query, payload.user_id, payload.product_id);
+        const query = `INSERT INTO orders (user_id, product_id, amount) VALUES ($1, $2, $3) RETURNING *`;
+        return await this.#_postgres.fetch(query, payload.user_id, payload.product_id, payload.amount);
     }
 
-    async finishExchange(id) {
-        const query = `UPDATE orders SET status = 'done' WHERE id = $1 RETURNING *`;
-        return await this.#_postgres.fetch(query, id);
+    async finishExchange(payload) {
+        const query = `UPDATE orders SET status = 'done' AND explanation = s1 WHERE id = $2 RETURNING *`;
+        return await this.#_postgres.fetch(query, payload.explanation, payload.id);
     }
 
     async cancelExchange(id) {

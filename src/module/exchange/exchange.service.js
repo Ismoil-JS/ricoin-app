@@ -31,8 +31,8 @@ class ExchangeService {
         return await this.#_exchangeModel.createExchange(payload);
     }
 
-    async finishExchange(id) {
-        return await this.#_exchangeModel.finishExchange(id);
+    async finishExchange(payload) {
+        return await this.#_exchangeModel.finishExchange(payload);
     }
 
     async cancelExchange(id) {

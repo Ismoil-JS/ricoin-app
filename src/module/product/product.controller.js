@@ -23,8 +23,8 @@ class ProductController {
 
     async createProduct(req, res) {
         try {
-            const product = await ProductService.createProduct(req.body);
-            res.status(200).json(product);
+            await ProductService.createProduct(req.body);
+            res.status(204).json();
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }
@@ -32,11 +32,11 @@ class ProductController {
 
     async updateProduct(req, res) {
         try {
-            const product = await ProductService.updateProduct({
+            await ProductService.updateProduct({
                 id: req.params.id,
                 ...req.body
             });
-            res.status(200).json(product);
+            res.status(204).json();
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }

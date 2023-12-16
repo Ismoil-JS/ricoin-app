@@ -23,6 +23,10 @@ class ProductService {
         return await this.#_productModel.updateProduct(payload);
     }
 
+    async updateProductAmount(payload) {
+        return await this.#_productModel.updateProductAmount(payload);
+    }
+
     async deleteProduct(id) {
         return await this.#_productModel.deleteProduct(id);
     }

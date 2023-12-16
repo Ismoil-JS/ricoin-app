@@ -18,14 +18,14 @@ export class ProductModel {
     }
 
     async createProduct(payload) {
-        const query = `INSERT INTO product (name, price, description, image) VALUES ($1, $2, $3, $4) RETURNING *`;
-        return await this.#_postgres.fetch(query, payload.name, payload.price, payload.description, payload.image);
+        const query = `INSERT INTO product (name, price, description, image, amount) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+        return await this.#_postgres.fetch(query, payload.name, payload.price, payload.description, payload.image, payload.amount);
     }
 
     async updateProduct(payload) {
         const product = await this.getProductById(payload.id);
 
-        const { name, price, image } = payload; // Destructure payload
+        const { name, price, description, image, amount } = payload; // Destructure payload
 
         const query = `
             UPDATE product 
@@ -33,8 +33,9 @@ export class ProductModel {
                 name = $1,
                 price = $2,
                 description = $3,
-                image = $4
-            WHERE id = $5
+                image = $4,
+                amount = $5
+            WHERE id = $6
             RETURNING *
         `;
 
@@ -42,8 +43,28 @@ export class ProductModel {
             query,
             name || product[0].name, // Use payload value if defined, otherwise use the existing value
             price || product[0].price,
-            payload.description || product[0].description,
+            description || product[0].description,
             image || product[0].image,
+            amount || product[0].amount,
+            payload.id
+        );
+    }
+
+    async updateProductAmount(payload) {
+        const product = await this.getProductById(payload.id);
+
+        const { amount } = payload; // Destructure payload
+
+        const query = `
+            UPDATE product 
+            SET 
+                amount = $1
+            WHERE id = $2
+        `;
+
+        return await this.#_postgres.fetch(
+            query,
+            amount || product[0].amount,
             payload.id
         );
     }

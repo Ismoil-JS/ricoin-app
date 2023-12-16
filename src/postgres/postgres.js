@@ -13,10 +13,6 @@ export class Postgres {
             password: process.env.DB_PASSWORD ?? '1234',
             database: process.env.DB_DATABASE ?? 'ricoin',
         });
-
-        // this.#pg = new pg.Pool({
-        //     connectionString: "postgres://ricoin_app_user:Ify5PdXrF7eXTERVEqp6vGtvZyfV20dA@dpg-cksi5v85vl2c738aeht0-a/ricoin_app",
-        // })
     }
 
     async fetch(SQL, ...params) {

@@ -1,5 +1,6 @@
 import { CalculateOrders, CancelOrders } from "../../utility/calculate-orders.utility.js";
 import exchangeService from "./exchange.service.js";
+import jwt from "jsonwebtoken";
 
 class ExchangeController {
 
@@ -51,12 +52,13 @@ class ExchangeController {
         try {
             const user_id = req.user;
             const product_id = req.params.id;
+            const {amount} = req.body;
 
-            CalculateOrders(user_id, product_id);
+            CalculateOrders(user_id, product_id, amount);
 
-            const exchange = await exchangeService.createExchange({ user_id, product_id });
+            await exchangeService.createExchange({ user_id, product_id, amount });
 
-            res.status(200).json(exchange);
+            res.status(204).json();
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }
@@ -64,9 +66,12 @@ class ExchangeController {
 
     async finishExchange(req, res) {
         try {
-            const exchange = await exchangeService.finishExchange(req.params.id);
+            const id = req.params.id;
+            const explanation = req.body.explanation;
 
-            res.status(200).json(exchange);
+            await exchangeService.finishExchange({ id, explanation });
+
+            res.status(204).json();
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }
@@ -76,9 +81,17 @@ class ExchangeController {
         try {
             const exchange = await exchangeService.getExchangeById(req.params.id);
 
-            console.log(exchange[0].order_status);
+            const userInfo = await exchangeService.getExchangeByIdNotChanged(req.params.id);
+
+            const token = req.header("x-auth-token");
             
-            if (!exchange.length) {
+            const user = jwt.verify(token, "secret");
+
+            if (user.id !== userInfo[0].user_id) {
+                return res.status(400).json({ status: 400, message: "You are not allowed to cancel this exchange" });
+            }
+            
+            if (!exchange.length ) {
                 return res.status(404).json({ status: 404, message: "Exchange does not exist with this ID" });
             }
             else if (exchange[0].order_status === "done") {

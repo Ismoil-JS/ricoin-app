@@ -9,7 +9,8 @@ CREATE TABLE product (
     name VARCHAR(255) NOT NULL,
     price INTEGER NOT NULL,
     description VARCHAR(255) NOT NULL,
-    image VARCHAR(255) NOT NULL
+    image VARCHAR(255) NOT NULL,
+    amount INTEGER NOT NULL DEFAULT 1
 );
 
 
