@@ -13,7 +13,8 @@ export class ExchangeModel {
             CONCAT(u.name, ' ', u.surname) AS user_full_name,
             p.name AS product_name,
             o.status AS order_status,
-            o.amount AS order_amount
+            o.amount AS order_amount,
+            o.explanation AS order_explanation
         FROM
             orders o
         JOIN
@@ -48,7 +49,8 @@ export class ExchangeModel {
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
             o.status AS order_status,
-            o.amount AS order_amount
+            o.amount AS order_amount,
+            o.explanation AS order_explanation
         FROM
             orders o
         JOIN
@@ -67,7 +69,8 @@ export class ExchangeModel {
             u.name || ' ' || u.surname AS user_full_name,
             p.name AS product_name,
             o.status AS order_status,
-            o.amount AS order_amount
+            o.amount AS order_amount,
+            o.explanation AS order_explanation
         FROM
             orders o
         JOIN
