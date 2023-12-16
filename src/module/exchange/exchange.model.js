@@ -91,7 +91,7 @@ export class ExchangeModel {
     }
 
     async finishExchange(payload) {
-        const query = `UPDATE orders SET status = 'done' AND explanation = s1 WHERE id = $2 RETURNING *`;
+        const query = `UPDATE orders SET status = 'done', explanation = $1 WHERE id = $2 RETURNING *`;
         return await this.#_postgres.fetch(query, payload.explanation, payload.id);
     }
 
