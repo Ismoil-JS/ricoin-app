@@ -20,7 +20,7 @@ export class UserModel {
     async signUp(payload) {
         const { name, surname, email, password } = payload;
 
-        const query = `INSERT INTO users(name, surname, email, password) VALUES($1, $2, $3, crypt($4, gen_salt('bf', 4))) RETURNING *`;
+        const query = `INSERT INTO users(name, surname, email, password, avatar) VALUES($1, $2, $3, crypt($4, gen_salt('bf', 4)), 'https://res.cloudinary.com/xurshidbey/image/upload/v1703793751/avatar/g8hk9ea0eiuw2ayxipsd.png') RETURNING *`;
         await this.#_postgres.fetch(query, name, surname, email, password);
     }
 
