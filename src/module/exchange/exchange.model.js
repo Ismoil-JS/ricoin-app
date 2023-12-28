@@ -83,6 +83,11 @@ export class ExchangeModel {
         return await this.#_postgres.fetch(query, id);
     }
 
+    async getExchangeByUserId(id) {
+        const query = `SELECT * from orders WHERE user_id = $1`;
+        return await this.#_postgres.fetch(query, id);
+    }
+
     async getExchangeByIdNotChanged(id) {
         const query = `SELECT * FROM orders WHERE id = $1`;
         return await this.#_postgres.fetch(query, id);

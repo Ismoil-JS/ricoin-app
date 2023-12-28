@@ -39,10 +39,28 @@ class ExchangeController {
             const exchange = await exchangeService.getExchangeById(req.params.id);
 
             if (!exchange.length) {
-                throw { status: 404, message: "Exchange does not exist with this ID" };
+                res.status(404).json({ status: 404, message: "Exchange does not exist with this ID" });
+            }
+            else{
+                res.status(200).json(exchange);
             }
 
-            res.status(200).json(exchange);
+        } catch (error) {
+            res.status(error.status).json({ message: error.message });
+        }
+    }
+
+    async getExchangeByUserId(req, res) {
+        try {
+            const exchange = await exchangeService.getExchangeByUserId(req.user);
+
+            if (!exchange.length) {
+                res.status(404).json({ status: 404, message: "Exchange does not exist with this ID" });
+            }
+            else{
+                res.status(200).json(exchange);
+            }
+
         } catch (error) {
             res.status(error.status).json({ message: error.message });
         }

@@ -43,6 +43,7 @@ CREATE TABLE orders (
     user_id UUID,
     product_id UUID,
     status order_status DEFAULT 'pending',
+    amount INTEGER DEFAULT 1,
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (product_id) REFERENCES product (id)
 );
@@ -50,16 +51,20 @@ CREATE TABLE orders (
 -- This is a join for the orders table
 
 SELECT
-    o.id AS order_id,
-    CONCAT(u.name, ' ', u.surname) AS user_full_name,
-    p.name AS product_name,
-    o.status AS order_status
-FROM
-    orders o
-JOIN
-    users u ON o.user_id = u.id
-JOIN
-    product p ON o.product_id = p.id;
+            o.id AS order_id,
+            u.name || ' ' || u.surname AS user_full_name,
+            p.name AS product_name,
+            o.status AS order_status,
+            o.amount AS order_amount,
+            o.explanation AS order_explanation
+        FROM
+            orders o
+        JOIN
+            users u ON o.user_id = u.id
+        JOIN
+            product p ON o.product_id = p.id
+        WHERE
+            o.id = $1;
 
 
 -- To identify the user that has earned coins in exact event

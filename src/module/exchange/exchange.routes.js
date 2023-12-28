@@ -8,9 +8,10 @@ const router = Router();
 
 export const exchangeRoutes = router
     .get("/", auth, adminAuth, exchangeController.getExchanges)
+    .get("/user", auth, CheckId, exchangeController.getExchangeByUserId)
     .get("/pending", auth, adminAuth, exchangeController.getPendingExchanges)
     .get("/finished", auth, adminAuth, exchangeController.getFinishedExchanges)
     .get("/:id", CheckId, checkExchangeId, exchangeController.getExchangeById)
     .post("/:id", auth, CheckId, checkProductId, coinsCheck, exchangeController.createExchange)
     .patch("/:id", auth, adminAuth, CheckId, checkExchangeId, exchangeController.finishExchange)
-    .delete("/:id", auth, adminAuth, CheckId, checkExchangeId, exchangeController.cancelExchange);
+    .delete("/:id", auth, CheckId, checkExchangeId, exchangeController.cancelExchange);

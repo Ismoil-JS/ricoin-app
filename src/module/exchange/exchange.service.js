@@ -23,6 +23,10 @@ class ExchangeService {
         return await this.#_exchangeModel.getExchangeById(id);
     }
 
+    async getExchangeByUserId(id) {
+        return await this.#_exchangeModel.getExchangeByUserId(id);
+    }
+
     async getExchangeByIdNotChanged(id) {
         return await this.#_exchangeModel.getExchangeByIdNotChanged(id);
     }
