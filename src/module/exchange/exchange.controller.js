@@ -52,9 +52,9 @@ class ExchangeController {
         try {
             const user_id = req.user;
             const product_id = req.params.id;
-            const {amount} = req.body;
+            const { amount } = req.body;
 
-            CalculateOrders(user_id, product_id, amount);
+            CalculateOrders(user_id, product_id, amount || 1);
 
             await exchangeService.createExchange({ user_id, product_id, amount });
 

@@ -21,7 +21,7 @@ app.use('/', (_, res) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, _, res, __) => {
   console.error(err.stack);
   res.status(500).send('Internal Server Error');
 });

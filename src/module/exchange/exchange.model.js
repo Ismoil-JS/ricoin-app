@@ -90,7 +90,7 @@ export class ExchangeModel {
 
     async createExchange(payload) {
         const query = `INSERT INTO orders (user_id, product_id, amount) VALUES ($1, $2, $3) RETURNING *`;
-        return await this.#_postgres.fetch(query, payload.user_id, payload.product_id, payload.amount);
+        return await this.#_postgres.fetch(query, payload.user_id, payload.product_id, payload.amount || 1);
     }
 
     async finishExchange(payload) {
