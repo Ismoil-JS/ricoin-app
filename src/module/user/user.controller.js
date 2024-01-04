@@ -87,14 +87,16 @@ class UserController {
     async createAdmin(req, res) {
         const chekUserEmail = await userService.checkEmail(req.body.email);
 
-        if (chekUserEmail.length > 0) {
-            return res.status(400).json({ message: "Email already exists" });
+        if (!chekUserEmail || chekUserEmail.length === 0) {
+            return res.status(400).json({ message: "Email not found" });
+        }
+        else{
+            const user = await userService.createAdmin(req.body).catch((err) => {
+                return res.status(400).json({ message: err.message });
+            });
+            res.status(200).json(user);
         }
 
-        const user = await userService.createAdmin(req.body).catch((err) => {
-            return res.status(400).json({ message: err.message });
-        });
-        res.status(200).json(user);
     }
 
     async deleteUser(req, res) {

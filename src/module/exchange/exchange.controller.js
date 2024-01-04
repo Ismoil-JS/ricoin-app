@@ -54,12 +54,7 @@ class ExchangeController {
         try {
             const exchange = await exchangeService.getExchangeByUserId(req.user);
 
-            if (!exchange.length) {
-                res.status(404).json({ status: 404, message: "Exchange does not exist with this ID" });
-            }
-            else{
-                res.status(200).json(exchange);
-            }
+            res.status(200).json(exchange);
 
         } catch (error) {
             res.status(error.status).json({ message: error.message });

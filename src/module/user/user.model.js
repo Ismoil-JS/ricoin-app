@@ -79,10 +79,13 @@ export class UserModel {
     }
 
     async createAdmin(payload) {
-        const { name, surname, email, password } = payload;
+        const { email } = payload;
 
-        const query = `INSERT INTO users(name, surname, email, password, role) VALUES($1, $2, $3, crypt($4, gen_salt('bf', 4)), 'admin') RETURNING *`;
-        await this.#_postgres.fetch(query, name, surname, email, password);
+        const query = `UPDATE users
+        SET role = 'admin'
+        WHERE email = $1
+        `;
+        await this.#_postgres.fetch(query, email);
     }
 
     async deleteUser(id) {
