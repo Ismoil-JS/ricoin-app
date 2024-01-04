@@ -20,14 +20,14 @@ export class UserModel {
     async signUp(payload) {
         const { name, surname, email, password } = payload;
 
-        const query = `INSERT INTO users(name, surname, email, password, avatar) VALUES($1, $2, $3, $4, 'https://res.cloudinary.com/xurshidbey/image/upload/v1703793751/avatar/g8hk9ea0eiuw2ayxipsd.png') RETURNING *`;
+        const query = `INSERT INTO users(name, surname, email, password, avatar) VALUES($1, $2, $3, crypt($4, gen_salt('bf', 4)), 'https://res.cloudinary.com/xurshidbey/image/upload/v1703793751/avatar/g8hk9ea0eiuw2ayxipsd.png') RETURNING *`;
         await this.#_postgres.fetch(query, name, surname, email, password);
     }
 
     async signIn(payload) {
         const { email, password } = payload;
 
-        const query = `SELECT * from users WHERE email = $1 AND password = $2`;
+        const query = `SELECT * from users WHERE email = $1 AND password = crypt($2, password)`;
         const user = await this.#_postgres.fetch(query, email, password);
         return user;
     }
