@@ -56,7 +56,7 @@ class UserController {
 
         const token = generateToken(user[0]);
         res.cookie("token", token);
-        res.header("Authorization", token);
+        res.header("x-auth-token", token);
 
         res.status(200).json({ token, ...user[0] });
     }
