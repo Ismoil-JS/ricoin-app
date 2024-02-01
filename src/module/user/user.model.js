@@ -17,6 +17,11 @@ export class UserModel {
         return await this.#_postgres.fetch(query, id);
     }
 
+    async getUserByEmail(email) {
+        const query = `SELECT * FROM users WHERE email = $1`;
+        return await this.#_postgres.fetch(query, email);
+    }
+
     async signUp(payload) {
         const { name, surname, email, password } = payload;
 
@@ -76,6 +81,23 @@ export class UserModel {
             avatar || user[0].avatar, // Use payload value if defined, otherwise use the existing value
             payload.id
         );
+    }
+
+    async setCoins(payload) {
+        const user = await this.getUserByEmail(payload.email);
+
+        const { coins } = payload; // Destructure payload
+
+        const  newCoins = user[0].coins + coins;
+
+        const query = `
+        UPDATE users 
+        SET 
+            coins = $1
+        WHERE email = $2
+        RETURNING *`;
+
+        return await this.#_postgres.fetch(query, newCoins, payload.email);
     }
 
     async createAdmin(payload) {

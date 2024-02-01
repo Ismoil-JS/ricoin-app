@@ -84,6 +84,13 @@ class UserController {
         res.json(user);
     }
 
+    async setCoins(req, res) {
+        await userService.setCoins(req.body).catch((err) => {
+            return res.status(400).json({ message: err.message });
+        });
+        res.status(204).json();
+    }
+
     async createAdmin(req, res) {
         const chekUserEmail = await userService.checkEmail(req.body.email);
 

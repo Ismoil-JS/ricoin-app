@@ -31,6 +31,10 @@ class UserService {
         return await this.#_userModel.setAvatar(payload);
     }
 
+    async setCoins(payload) {
+        return await this.#_userModel.setCoins(payload);
+    }
+
     async createAdmin(payload) {
         return await this.#_userModel.createAdmin(payload);
     }

@@ -14,5 +14,6 @@ export const userRoutes = router
     .post("/admin", auth, adminAuth, userController.createAdmin)
     .patch("/", auth, CheckId, userController.updateUser)
     .patch("/avatar", auth, CheckId, userController.setAvatar)
+    .patch("/coins", auth, CheckId, userController.setCoins)
     .delete("/:id", auth, adminAuth, CheckId, userController.deleteUser)
     
